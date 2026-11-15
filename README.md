@@ -24,6 +24,7 @@ All cards share the same keys. Anything missing is hidden or shown as "–".
 ```yaml
 type: custom:cyberpunk-card
 title: Home
+language: en                          # en or de; defaults to the Home Assistant language
 outside_temperature: sensor.outdoor_temperature
 outside_humidity: sensor.outdoor_humidity
 weather: weather.forecast_home        # condition, and fallback for the outdoor temperature
@@ -61,7 +62,7 @@ The idle screen puts a black layer with a faint clock over the dashboard; a tap 
 
 People come from all `person.*` entities, low batteries from all sensors with `device_class: battery`.
 
-The text shown on the cards is German.
+The cards speak English and German. Without `language` they follow the Home Assistant language; anything other than German shows English.
 
 ## Installation
 
@@ -93,6 +94,8 @@ Apache License 2.0, copyright 2026 Axel Eble. If you redistribute or modify the 
 
 ### Cyberpunk
 
+![Screenshot](images/cyberpunk-card-de.png)
+
 Neon-HUD mit Scanlines, Glitch-Logo und Rasterboden.
 
 - Kacheln für Außenwerte, Heizung, Internetdurchsatz und Hausleistung mit Verlauf der letzten 6 Stunden.
@@ -107,7 +110,6 @@ ads: false        # Werbung ganz abschalten (Standard: an)
 ad_interval: 40   # Sekunden zwischen zwei Schildern, mindestens 10
 ad_duration: 9    # Sekunden, die ein Schild stehen bleibt
 ```
-
 #### Konfiguration
 
 Alle Karten teilen sich dieselben Schlüssel. Was fehlt, wird ausgeblendet oder als „–“ angezeigt.
@@ -115,6 +117,7 @@ Alle Karten teilen sich dieselben Schlüssel. Was fehlt, wird ausgeblendet oder 
 ```yaml
 type: custom:cyberpunk-card
 title: Haus
+language: de                          # de oder en; Standard ist die Sprache von Home Assistant
 outside_temperature: sensor.aussen_temperatur
 outside_humidity: sensor.aussen_feuchte
 weather: weather.forecast_home        # Zustand und Ersatz für die Außentemperatur
