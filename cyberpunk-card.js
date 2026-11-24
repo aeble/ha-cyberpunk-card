@@ -26,7 +26,7 @@ const tx = (key, vars = {}) => {
 
 
 
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const num = (hass, id) => {
   const s = id && hass.states[id];
@@ -570,7 +570,7 @@ class CyberpunkCard extends TemplateCard {
         `${tx('outside')} ${fmt(m.outside.temperature)}°C`, h.configured ? `${tx('boiler_2')} ${fmt(h.boiler)}°C` : '', h.configured ? (h.flame ? tx('burner_active') : tx('burner_idle')) : '',
         `${tx('grid_load')} ${fmt(m.power, 0)} W`, h.configured ? `GAS ${fmt(h.gasToday, 2)} M³` : '', `${lit}/${m.lights.length} ${tx('lights_on')}`,
         ...m.lowBattery.slice(0, 5).map((b) => `${tx('battery')} ${b.name.toUpperCase()} ${fmt(b.level, 0)} %`),
-      ].filter(Boolean).join('  ///  '),
+      ].filter(Boolean).map(esc).join('  ///  '),
     };
   }
 
@@ -588,7 +588,7 @@ class CyberpunkCard extends TemplateCard {
     if (!this.config.power) return;
     const start = new Date(Date.now() - 6 * 3600e3).toISOString();
     try {
-      const res = await this._hass.callApi('GET', `history/period/${start}?filter_entity_id=${this.config.power}&minimal_response&no_attributes`);
+      const res = await this._hass.callApi('GET', `history/period/${start}?filter_entity_id=${encodeURIComponent(this.config.power)}&minimal_response&no_attributes`);
       this._series = (res[0] || []).map((p) => [Date.parse(p.last_changed), parseFloat(p.state)]).filter((p) => Number.isFinite(p[1]));
       this._draw();
     } catch (e) {
